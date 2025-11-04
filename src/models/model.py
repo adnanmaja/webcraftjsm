@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Numeric, Text, TIMESTAMP, CheckConstraint
 from sqlalchemy.orm import relationship
-from db import base
+from database.db import base, engine
 
-# Schema DB nyaaa (cek db_schema.md)
+# ==== Schema DB nyaaa (cek db_schema.md) ====
 
 # ini untuk user, basically semua yang pake lah, ada admin, penjual, sama customer
 class User(base):
@@ -42,7 +42,7 @@ class MenuItem(base):
     image_url = Column(String)
     stock = Column(Integer, default=0)
  
-    kantin = relationship("Kantin", back_populates="orders") 
+    kantin = relationship("Kantin", back_populates="menu_items")
     order_items = relationship("OrderItem", back_populates="menu_item")
 
 # Jumlah orderan (kayak keranjang gitu)
@@ -73,3 +73,7 @@ class OrderItem(base):
     order = relationship("Order", back_populates="order_items")
     menu_item = relationship("MenuItem", back_populates="order_items")
 
+# hapus tabel lawas, ganti sek anyar
+if __name__ == "__main__":
+    base.metadata.drop_all(engine)
+    base.metadata.create_all(engine)
