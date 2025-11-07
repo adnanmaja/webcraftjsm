@@ -62,8 +62,8 @@ const Register = () => {
         <div className="w-full max-w-xs bg-white shadow-lg rounded-2xl p-8 text-center">
           <h2 className="text-2xl font-bold text-green-500 mb-4">Registration Successful!</h2>
           <p className="mb-4">Your account has been created successfully.</p>
-          <Link to="/">
-            <Button className="bg-green-500 w-full">Go to Login</Button>
+          <Link to="/login">
+            <Button className="bg-green-500 w-full">Go to Login </Button>
           </Link>
         </div>
       </div>
@@ -130,7 +130,7 @@ const Register = () => {
           </Button>
         </form>
         <p className="mt-4 text-sm text-center">
-          Sudah punya akun? <Link className="text-blue-500 underline" to="/">Login</Link>
+          Sudah punya akun? <Link className="text-blue-500 underline" to="/login">Login</Link>
         </p>
       </div>
     </div>
