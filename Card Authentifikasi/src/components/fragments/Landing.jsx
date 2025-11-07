@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import GamadanG from "../../assets/GamadanG.svg";
 import maskot from "../../assets/maskot.svg";
 import Vector from "../../assets/Vector.svg";
@@ -9,6 +10,15 @@ import Frame4 from "../../assets/Frame 4.svg";
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleButtonClick = () => {
+    if (isAuthenticated) {
+      navigate("/dashboard"); // nek udah log in, pergi ke dashboard
+    } else {
+      navigate("/login"); // klau belum login ya login lah
+    }
+  };
 
   return (
     <div
@@ -41,8 +51,9 @@ export default function Landing() {
             </span>
           </div>
           <div className="flex justify-center w-full mt-4">
-            <button
-              onClick={() => navigate("/login")}
+
+             <button
+              onClick={handleButtonClick}
               className="relative w-[280px] md:w-[353px] h-[60px] md:h-[76px] group drop-shadow-[0_5px_15px_rgba(0,0,0,0.4)]"
             >
               <div className="absolute inset-0 rounded-[20px] bg-gradient-to-r from-[#F08A07] via-[#F16B18] to-[#F1732F] transition-transform duration-300 group-hover:scale-100 group-hover:shadow-lg"></div>
@@ -55,6 +66,7 @@ export default function Landing() {
                 Mulai Madang &gt;
               </div>
             </button>
+
           </div>
         </div>
 
