@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "backend"
+version = "0.1.0"
+
+[tool.setuptools.packages.find]
+where = ["backend"]
