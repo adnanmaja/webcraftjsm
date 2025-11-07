@@ -28,7 +28,6 @@ const Register = () => {
     setError("");
     
     try {
-      // Replace with your actual API endpoint
       const response = await fetch("https://webcraftapi.vercel.app/api/register", {
         method: "POST",
         headers: {
@@ -47,8 +46,8 @@ const Register = () => {
       setSuccess(true);
       console.log("Registration successful:", data);
       
-      // Optional: Redirect to login page or dashboard
-      // navigate("/login");
+      
+      navigate("/login");
 
     } catch (err) {
       setError(err.message);
