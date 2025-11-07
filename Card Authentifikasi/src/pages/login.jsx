@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/elements/Button";
 import InputForm from "../components/elements/Index";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext"; // Import the hook
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,18 +10,24 @@ const Login = () => {
     password: ""
   });
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate(); // Add this hook for navigation
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Get login function from context
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    if (errorMessage) {
+      setErrorMessage("");
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    setErrorMessage("");
 
     try {
       const response = await fetch('https://webcraftapi.vercel.app/api/login', {
@@ -35,26 +42,28 @@ const Login = () => {
         const result = await response.json();
         console.log('Login successful:', result);
         
-        // Store the token in localStorage
-        localStorage.setItem('token', result.access_token);
-        localStorage.setItem('user_id', result.user_id);
-        localStorage.setItem('email', result.email);
-        localStorage.setItem('name', result.name);
+        // Use the context login function instead of direct localStorage
+        login({
+          user_id: result.user_id,
+          email: result.email,
+          name: result.name
+        }, result.access_token);
         
-        // Redirect to dashboard
         navigate("../../dashboard");
+      } else if (response.status === 401) {
+        setErrorMessage("Invalid email or password. Please try again.");
       } else {
         const error = await response.json();
-        console.error('Login failed:', error);
-        alert(error.message || 'Login failed. Please try again.');
+        setErrorMessage(error.message || "Something went wrong. Please try again.");
       }
     } catch (error) {
       console.error('Network error:', error);
-      alert('Network error. Please check your connection.');
+      setErrorMessage("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="flex justify-center bg-orange-300 min-h-screen items-center">

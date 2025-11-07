@@ -1,12 +1,20 @@
 import React, { useReducer } from "react";
-import { Link } from "react-router-dom"; // ✅ Import Link
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext"; // Import the auth hook
 import GamadanG from "../../assets/GamadanG.svg";
 import Palelu from "../../assets/palelu.svg"; 
 
 function Navbar() {
   const [state, dispatch] = useReducer(reducer, { property1: "default" });
+  const { isAuthenticated, user, logout } = useAuth(); // Get auth state
 
   const dashboardPadding = state.property1 === "after" ? "py-2.5 px-5" : "py-1.5 px-4";
+
+  const handleLogout = () => {
+    logout();
+    // Optional: redirect to home after logout
+    // window.location.href = "/";
+  };
 
   return (
     <nav
@@ -16,7 +24,7 @@ function Navbar() {
         sticky top-0 z-50
         flex items-center justify-between
         bg-white
-        w-full max-w-[1921px}
+        w-full max-w-[1921px]
         ${state.property1 === "after" ? "h-[93px] shadow-lg" : "h-[59px] shadow-none"}
         px-8 mx-auto
         bg-white-900 text-gray
@@ -59,22 +67,64 @@ function Navbar() {
           About
         </Link>
 
-        {/* Dashboard */}
-        <Link
-          to="/dashboard"
-          className={`
-            border-1 border-white
-            px-4 py-1.5
-            text sm
-            rounded-2xl
-            ${dashboardPadding}
-            bg-orange-200 hover:text-gray-900
-            transition-all duration-300
-            flex items-center justify-center font-size m-3.5
-          `}
-        >
-          Dashboard
-        </Link>
+        {/* Conditional Dashboard/Login Button */}
+        {isAuthenticated ? (
+          <>
+            {/* Dashboard Button (shown when logged in) */}
+            <Link
+              to="/dashboard"
+              className={`
+                border-1 border-white
+                px-4 py-1.5
+                text sm
+                rounded-2xl
+                ${dashboardPadding}
+                bg-orange-200 hover:text-gray-900
+                transition-all duration-300
+                flex items-center justify-center font-size m-3.5
+              `}
+            >
+              Dashboard
+            </Link>
+            
+            {/* User Menu (optional) */}
+            <div className="flex items-center space-x-3">
+              <span className="text-sm text-gray-600">
+                Hi, {user?.name || user?.email}
+              </span>
+              <button
+                onClick={handleLogout}
+                className={`
+                  border-1 border-white
+                  rounded-2xl
+                  ${dashboardPadding}
+                  bg-gray-100 hover:bg-gray-200
+                  transition-all duration-300
+                  flex items-center justify-center text-sm
+                `}
+              >
+                Logout
+              </button>
+            </div>
+          </>
+        ) : (
+          /* Login Button (shown when not logged in) */
+          <Link
+            to="/login"
+            className={`
+              border-1 border-white
+              px-4 py-1.5
+              text sm
+              rounded-2xl
+              ${dashboardPadding}
+              bg-orange-200 hover:text-gray-900
+              transition-all duration-300
+              flex items-center justify-center font-size m-3.5
+            `}
+          >
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );

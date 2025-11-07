@@ -12,6 +12,6 @@ const InputForm = (props) => {
             />
         </div>
     )
-}
+}   
 
 export default InputForm;
