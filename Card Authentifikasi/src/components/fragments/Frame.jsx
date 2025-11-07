@@ -1,44 +1,60 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"; // ✅ untuk navigasi halaman
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-// 🔹 Import semua gambar kantin
+// 🔹 Import gambar kantin (fallback jika API tidak menyediakan gambar)
 import fotoKantin from "../../assets/Foto Kantin.svg";
 
-// 🔹 Data semua kantin
-const kantinData = [
-  {
-    id: 1,
-    image: fotoKantin,
-    title: "Kantin BioGeo",
-    description:
-      "Kantin favorit mahasiswa FMIPA dengan suasana sejuk dan harga terjangkau. Banyak pilihan makanan berat dan ringan.",
-  },
-  {
-    id: 2,
-    image: fotoKantin,
-    title: "Kansas",
-    description:
-      "Kantin Sastra yang terkenal dengan makanan kekiniannya dan spot nongkrong yang cozy banget buat anak FIB dan Filsafat.",
-  },
-  {
-    id: 3,
-    image: fotoKantin,
-    title: "Pujale",
-    description:
-      "Pusat jajanan lengkap di area Teknik. Pujale dikenal dengan aneka nasi goreng, ayam geprek, dan minuman segar.",
-  },
-  {
-    id: 4,
-    image: fotoKantin,
-    title: "Bonbin",
-    description:
-      "Kantin di area Biologi yang dikelilingi pepohonan rindang, cocok buat makan sambil istirahat di siang hari.",
-  },
-];
-
-// 🔹 Komponen utama Frame
 export const Frame = () => {
   const navigate = useNavigate();
+  const [kantinData, setKantinData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 🔹 Fetch data dari API
+  useEffect(() => {
+    const fetchKantinData = async () => {
+      try {
+        const API_URL = "https://webcraftapi.vercel.app/api/kantin"; // ← Replace with your real API
+      
+        console.log("Fetching from:", API_URL);
+        const response = await fetch(API_URL);
+        
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+
+        console.log("Response status:", response.status);
+        console.log("Response headers:", response.headers);
+        
+        // Get the raw text first to see what we're actually getting
+        const data = await response.json();
+        console.log("Data response:", data);
+      
+        // 🔹 Map data dari API ke format yang diharapkan komponen
+        const mappedData = data.map(kantin => ({
+          id: kantin.id,
+          image: fotoKantin, // Fallback image
+          title: kantin.name,
+          description: kantin.description,
+          // Tambahkan field lain jika diperlukan
+          location: kantin.location,
+          owner_id: kantin.owner_id
+        }));
+        
+        console.log("Mapped data:", mappedData)
+        setKantinData(mappedData);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching kantin data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchKantinData();
+  }, []);
 
   // 🔸 Fungsi klik tombol berdasarkan ID
   const handleClick = (id) => {
@@ -50,6 +66,32 @@ export const Frame = () => {
         alert("Halaman kantin belum tersedia 😅");
     }
   };
+
+  // 🔹 Tampilkan loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center w-full max-w-[1445px] min-h-[744px] bg-[#704443] rounded-[25px] border-[5px] border-dashed border-white">
+        <div className="text-white text-xl">Memuat data kantin...</div>
+      </div>
+    );
+  }
+
+  // 🔹 Tampilkan error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center w-full max-w-[1445px] min-h-[744px] bg-[#704443] rounded-[25px] border-[5px] border-dashed border-white">
+        <div className="text-white text-xl text-center">
+          Error: {error}<br />
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:opacity-70"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -92,9 +134,16 @@ export const Frame = () => {
             <p className="text-[#c3a987] text-sm md:text-base leading-relaxed line-clamp-3">
               {kantin.description}
             </p>
+            
+            {/* Tampilkan lokasi jika tersedia */}
+            {kantin.location && (
+              <p className="text-[#8a6d3b] text-sm">
+                📍 {kantin.location}
+              </p>
+            )}
 
             <button
-              onClick={() => handleClick(kantin.id)} // ✅ navigasi sesuai ID
+              onClick={() => handleClick(kantin.id)}
               className="
                 mt-3 w-[180px] h-10 rounded-[20px]
                 bg-[linear-gradient(90deg,rgba(240,138,7,1)_15%,rgba(241,115,47,1)_100%)]
