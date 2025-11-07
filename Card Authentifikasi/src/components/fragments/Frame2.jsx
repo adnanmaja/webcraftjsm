@@ -5,34 +5,34 @@ const kantinData = [
   {
     id: 1,
     image: fotoKantin,
-    title: "Kantin BioGeo",
+    title: "Warung Bakso nakmantu",
     description:
       "Kantin favorit mahasiswa FMIPA dengan suasana sejuk dan harga terjangkau. Banyak pilihan makanan berat dan ringan.",
   },
   {
     id: 2,
     image: fotoKantin,
-    title: "Kansas",
+    title: "Pawon Hotplate Bu Yani",
     description:
       "Kantin Sastra yang terkenal dengan makanan kekiniannya dan spot nongkrong yang cozy banget buat anak FIB dan Filsafat.",
   },
   {
     id: 3,
     image: fotoKantin,
-    title: "Pujale",
+    title: "Warung B",
     description:
       "Pusat jajanan lengkap di area Teknik. Pujale dikenal dengan aneka nasi goreng, ayam geprek, dan minuman segar.",
   },
   {
     id: 4,
     image: fotoKantin,
-    title: "Bonbin",
+    title: "Warung C",
     description:
       "Kantin di area Biologi yang dikelilingi pepohonan rindang, cocok buat makan sambil istirahat di siang hari.",
   },
 ];
 
-export const Frame = () => {
+export const Frame2 = () => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const actionButtons = [
