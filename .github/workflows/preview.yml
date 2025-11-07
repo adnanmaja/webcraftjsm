@@ -24,12 +24,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./"Card Authentifikasi" 
 
       - name: Build project
         run: npm run build
+        working-directory: ./"Card Authentifikasi" 
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./"Card Authentifikasi"/dist
