@@ -280,7 +280,7 @@ export default function Menu() {
       <Navbar />
 
       {/* Page Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-36 pb-20">
         {/* Page Header */}
         <motion.div
           initial={{ y: -50, opacity: 0 }}
@@ -505,21 +505,21 @@ export default function Menu() {
                 ease: [0.19, 1.0, 0.22, 1.0],
               }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-white rounded-[30px] border border-gray-200 w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+              className="relative bg-white rounded-[20px] border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
             >
-              <div className="p-6 md:p-12">
+              <div className="p-6">
                 {/* Header */}
-                <div className="relative pb-6 mb-6 border-b-[5px] border-gray-200">
-                  <h2 className="text-yellow-900 text-4xl md:text-6xl font-bold font-poppins">
+                <div className="relative pb-4 mb-4 border-b-2 border-gray-200">
+                  <h2 className="text-yellow-900 text-2xl font-bold font-poppins">
                     Tambah Menu
                   </h2>
                 </div>
 
                 {/* Form Fields */}
-                <div className="space-y-8">
+                <div className="space-y-4">
                   {/* Nama Menu */}
                   <div>
-                    <label className="block text-yellow-900 text-2xl md:text-3xl font-semibold font-poppins mb-3">
+                    <label className="block text-yellow-900 text-sm font-semibold font-poppins mb-1.5">
                       Nama Menu
                     </label>
                     <input
@@ -527,14 +527,14 @@ export default function Menu() {
                       name="name"
                       value={newMenu.name}
                       onChange={handleInputChange}
-                      className="w-full h-20 md:h-24 bg-white rounded-[20px] border-[5px] border-gray-200 px-6 text-yellow-900 text-xl md:text-2xl font-poppins focus:outline-none focus:border-orange-400 transition-colors"
+                      className="w-full h-10 bg-white rounded-lg border-2 border-gray-200 px-3 text-yellow-900 text-sm font-poppins focus:outline-none focus:border-orange-400 transition-colors"
                       placeholder="Masukkan nama menu"
                     />
                   </div>
 
                   {/* Kategori Menu */}
                   <div>
-                    <label className="block text-yellow-900 text-2xl md:text-3xl font-semibold font-poppins mb-3">
+                    <label className="block text-yellow-900 text-sm font-semibold font-poppins mb-1.5">
                       Kategori Menu
                     </label>
                     <input
@@ -542,14 +542,14 @@ export default function Menu() {
                       name="category"
                       value={newMenu.category}
                       onChange={handleInputChange}
-                      className="w-full h-20 md:h-24 bg-white rounded-[20px] border-[5px] border-gray-200 px-6 text-yellow-900 text-xl md:text-2xl font-poppins focus:outline-none focus:border-orange-400 transition-colors"
+                      className="w-full h-10 bg-white rounded-lg border-2 border-gray-200 px-3 text-yellow-900 text-sm font-poppins focus:outline-none focus:border-orange-400 transition-colors"
                       placeholder="Contoh: Makanan berat, Minuman, dll"
                     />
                   </div>
 
                   {/* Deskripsi Menu */}
                   <div>
-                    <label className="block text-yellow-900 text-2xl md:text-3xl font-semibold font-poppins mb-3">
+                    <label className="block text-yellow-900 text-sm font-semibold font-poppins mb-1.5">
                       Deskripsi Menu
                     </label>
                     <textarea
@@ -557,18 +557,18 @@ export default function Menu() {
                       value={newMenu.description}
                       onChange={handleInputChange}
                       rows="3"
-                      className="w-full bg-white rounded-[20px] border-[5px] border-gray-200 px-6 py-4 text-yellow-900 text-xl md:text-2xl font-poppins focus:outline-none focus:border-orange-400 transition-colors resize-none"
+                      className="w-full bg-white rounded-lg border-2 border-gray-200 px-3 py-2 text-yellow-900 text-sm font-poppins focus:outline-none focus:border-orange-400 transition-colors resize-none"
                       placeholder="Masukkan deskripsi menu"
                     ></textarea>
                   </div>
 
                   {/* Harga Menu */}
                   <div>
-                    <label className="block text-yellow-900 text-2xl md:text-3xl font-semibold font-poppins mb-3">
+                    <label className="block text-yellow-900 text-sm font-semibold font-poppins mb-1.5">
                       Harga Menu
                     </label>
                     <div className="relative">
-                      <span className="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400 text-3xl md:text-4xl font-medium font-poppins">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm font-medium font-poppins">
                         Rp
                       </span>
                       <input
@@ -576,7 +576,7 @@ export default function Menu() {
                         name="price"
                         value={newMenu.price}
                         onChange={handleInputChange}
-                        className="w-full h-20 md:h-24 bg-white rounded-[20px] border-[5px] border-gray-200 pl-20 pr-6 text-yellow-900 text-xl md:text-2xl font-poppins focus:outline-none focus:border-orange-400 transition-colors"
+                        className="w-full h-10 bg-white rounded-lg border-2 border-gray-200 pl-10 pr-3 text-yellow-900 text-sm font-poppins focus:outline-none focus:border-orange-400 transition-colors"
                         placeholder="0"
                       />
                     </div>
@@ -584,16 +584,16 @@ export default function Menu() {
 
                   {/* Foto Menu */}
                   <div>
-                    <label className="block text-yellow-900 text-2xl md:text-3xl font-semibold font-poppins mb-3">
+                    <label className="block text-yellow-900 text-sm font-semibold font-poppins mb-1.5">
                       Foto Menu
                     </label>
-                    <div className="relative w-full h-20 md:h-24 bg-white rounded-[20px] border-[5px] border-gray-200 flex items-center overflow-hidden">
-                      <div className="h-full w-48 bg-white border-r-[5px] border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
-                        <span className="text-zinc-400 text-2xl md:text-4xl font-medium font-poppins">
+                    <div className="relative w-full h-10 bg-white rounded-lg border-2 border-gray-200 flex items-center overflow-hidden">
+                      <div className="h-full w-24 bg-white border-r-2 border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+                        <span className="text-zinc-400 text-xs font-medium font-poppins">
                           Pilih file
                         </span>
                       </div>
-                      <span className="flex-1 px-6 text-zinc-400 text-xl md:text-4xl font-medium font-poppins">
+                      <span className="flex-1 px-3 text-zinc-400 text-xs font-medium font-poppins">
                         Tidak ada file yang dipilih
                       </span>
                     </div>
@@ -610,9 +610,9 @@ export default function Menu() {
                   }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.3, ease: [0.19, 1.0, 0.22, 1.0] }}
-                  className="w-full md:w-96 h-20 md:h-24 bg-yellow-900 rounded-[20px] mt-12 hover:bg-yellow-800 transition-colors"
+                  className="w-full h-10 bg-yellow-900 rounded-lg mt-6 hover:bg-yellow-800 transition-colors"
                 >
-                  <span className="text-white text-3xl md:text-4xl font-semibold font-poppins">
+                  <span className="text-white text-sm font-semibold font-poppins">
                     Tambah Menu
                   </span>
                 </motion.button>
