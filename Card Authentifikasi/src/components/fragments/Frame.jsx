@@ -14,7 +14,7 @@ export const Frame = () => {
   useEffect(() => {
     const fetchKantinData = async () => {
       try {
-        const API_URL = "https://webcraftapi.vercel.app/api/kantin"; // ← Replace with your real API
+        const API_URL = "https://webcraftapi.vercel.app/api/kantin"; 
       
         console.log("Fetching from:", API_URL);
         const response = await fetch(API_URL);
