@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import fotoKantin from "../../assets/Foto Kantin.svg";
+import download from "../../assets/download 2.svg";
 
 const kantinData = [
   {
@@ -7,29 +8,61 @@ const kantinData = [
     image: fotoKantin,
     title: "Warung Bakso nakmantu",
     description:
-      "Kantin favorit mahasiswa FMIPA dengan suasana sejuk dan harga terjangkau. Banyak pilihan makanan berat dan ringan.",
+      "Nikmati kelezatan bakso yang menggugah selera di Warung Bakso Nakmantu — tempat di mana cita rasa dan kenyamanan bertemu dalam satu mangkuk.",
   },
   {
     id: 2,
-    image: fotoKantin,
-    title: "Pawon Hotplate Bu Yani",
+    image: download,
+    title: "Warung Default",
     description:
-      "Kantin Sastra yang terkenal dengan makanan kekiniannya dan spot nongkrong yang cozy banget buat anak FIB dan Filsafat.",
+      "Tersedia Nanti !!! Hehehe :)",
   },
   {
     id: 3,
-    image: fotoKantin,
-    title: "Warung B",
+    image: download,
+    title: "Warung Default",
     description:
-      "Pusat jajanan lengkap di area Teknik. Pujale dikenal dengan aneka nasi goreng, ayam geprek, dan minuman segar.",
-  },
+  "Tersedia Nanti !!! Hehehe :)"  },
   {
     id: 4,
-    image: fotoKantin,
-    title: "Warung C",
+    image: download,
+    title: "Warung Default",
     description:
-      "Kantin di area Biologi yang dikelilingi pepohonan rindang, cocok buat makan sambil istirahat di siang hari.",
+      "Tersedia Nanti !!! Hehehe :).",
   },
+  {
+    id: 5,
+    image: download,
+    title: "Warung Default",
+    description:
+    "Tersedia Nanti !!! Hehehe :)"
+
+  },
+  {
+    id: 6,
+    image: download,
+    title: "Warung Default",
+    description:
+    "Kantin di area Biologi yang"
+
+  },
+  {
+    id: 7,
+    image: download,
+    title: "Warung Default",
+    description:
+    "Tersedia Nanti !!! Hehehe :)"
+
+  },
+  {
+    id: 8,
+    image: download,
+    title: "Warung Default",
+    description:
+    "Tersedia Nanti !!! Hehehe :)"
+
+  }
+  
 ];
 
 export const Frame2 = () => {
@@ -58,8 +91,8 @@ export const Frame2 = () => {
     <div
       className="
         flex flex-wrap items-center justify-center
-        w-full max-w-[1445px] min-h-[744px] gap-7 p-10
-        bg-[#704443] rounded-[25px] border-[5px] border-dashed border-white
+        w-full max-w-[1445px] min-h-[744px] gap-8 p-10
+        bg-[#704443] rounded-[25px] border-[7px] border-dashed border-white
       "
     >
       {kantinData.map((kantin) => (
@@ -67,7 +100,7 @@ export const Frame2 = () => {
           key={kantin.id}
           className="
             flex flex-col md:flex-row items-center gap-6
-            p-6 w-[90%] md:w-[600px] min-h-[340px]
+            p-6 w-[96%] md:w-[650px] min-h-[340px]
             rounded-[10px] border border-solid border-[#d6bfa3]
             bg-[linear-gradient(90deg,rgba(252,250,235,1)_18%,rgba(239,221,162,1)_100%)]
             shadow-lg hover:scale-[1.03] transition-transform duration-300

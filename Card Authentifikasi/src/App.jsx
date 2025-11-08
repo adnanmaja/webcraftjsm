@@ -8,7 +8,7 @@ import Dashboard from "./components/fragments/Dashboard";
 
 // 🔹 Import halaman Warung
 import Warung1 from "./components/fragments/Warung1";
-
+import { Frame2 } from "./components/fragments/Frame2"; // Import Frame2 for warung pages
 
 function App() {
   return (
@@ -27,7 +27,10 @@ function App() {
         {/* Halaman dashboard */}
         <Route path="/dashboard" element={<Dashboard />} />
 
-        {/* 🔹 Halaman kantin */}
+        {/* 🔹 Halaman kantin dengan dynamic parameter */}
+        <Route path="/warung/:kantinId" element={<Frame2 />} />
+        
+        {/* Keep existing Warung1 route for backward compatibility */}
         <Route path="/Warung1" element={<Warung1 />} />
         
       </Routes>

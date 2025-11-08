@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-// 🔹 Import gambar kantin (fallback jika API tidak menyediakan gambar)
 import fotoKantin from "../../assets/Foto Kantin.svg";
 
 export const Frame = () => {
@@ -19,16 +17,10 @@ export const Frame = () => {
         console.log("Fetching from:", API_URL);
         const response = await fetch(API_URL);
         
-        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-
-        console.log("Response status:", response.status);
-        console.log("Response headers:", response.headers);
-        
-        // Get the raw text first to see what we're actually getting
         const data = await response.json();
         console.log("Data response:", data);
       
@@ -38,7 +30,6 @@ export const Frame = () => {
           image: fotoKantin, // Fallback image
           title: kantin.name,
           description: kantin.description,
-          // Tambahkan field lain jika diperlukan
           location: kantin.location,
           owner_id: kantin.owner_id
         }));
@@ -56,15 +47,10 @@ export const Frame = () => {
     fetchKantinData();
   }, []);
 
-  // 🔸 Fungsi klik tombol berdasarkan ID
-  const handleClick = (id) => {
-    switch (id) {
-      case 1:
-        navigate("/Warung1");
-        break;
-      default:
-        alert("Halaman kantin belum tersedia 😅");
-    }
+  // 🔸 Updated: Pass kantin ID when navigating
+  const handleClick = (kantinId) => {
+    // Navigate to warung page with kantin ID as parameter
+    navigate(`/warung/${kantinId}`);
   };
 
   // 🔹 Tampilkan loading state
