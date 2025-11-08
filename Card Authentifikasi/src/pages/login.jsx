@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import Button from "../components/elements/Button";
-import InputForm from "../components/elements/Index";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { LogIn, Mail, Lock, ArrowRight } from "lucide-react";
+import bgImage from "@/assets/Background.svg";
 import { useAuth } from "../contexts/AuthContext"; // Import the hook
 
 const Login = () => {
@@ -64,45 +74,122 @@ const Login = () => {
     }
   };
 
-
   return (
-    <div className="flex justify-center bg-orange-300 min-h-screen items-center">
-      <div className="w-full max-w-xs bg-white shadow-lg rounded-2xl p-8">
-        <h1 className="text-3xl font-bold mb-2 text-orange-500">Login</h1>
-        <p className="font-medium text-slate-500 mb-8">
-          Welcome, Please enter your details
-        </p>
-        <form onSubmit={handleSubmit}>
-          <InputForm
-            label="Email"
-            type="email"
-            placeholder="example@gmail.com"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <InputForm
-            label="Password"
-            type="password"
-            placeholder="******"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <Button 
-            type="submit" 
-            className="bg-orange-500 w-full mt-4"
-            disabled={isLoading}
-          >
-            {isLoading ? "Logging in..." : "Login"}
-          </Button>
-        </form>
-        <p className="mt-4 text-sm text-center">
-          Belum punya akun? <Link className="text-blue-500 underline" to="/register">Register</Link>
-        </p>
-      </div>
+    <div
+      className="min-h-screen w-full relative overflow-hidden flex items-center justify-center"
+      style={{ background: "linear-gradient(to bottom, #F2BE7C, #FFFFFF)" }}
+    >
+      {/* Background Pattern */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.9,
+        }}
+      />
+
+      {/* Login Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.8, ease: [0.19, 1.0, 0.22, 1.0] }}
+        className="relative z-10 w-full max-w-md px-4"
+      >
+        <Card className="border-2 border-orange-200 shadow-2xl overflow-hidden">
+          {/* Gradient Header */}
+          <div className="h-2 bg-gradient-to-r from-orange-500 to-orange-400" />
+
+          <CardHeader className="text-center pt-8">
+            <div className="mx-auto mb-4 p-4 bg-gradient-to-br from-orange-500 to-orange-400 rounded-full w-16 h-16 flex items-center justify-center">
+              <LogIn className="w-8 h-8 text-white" />
+            </div>
+            <CardTitle className="text-3xl font-bold text-gray-800">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-base">
+              Sign in to access your dashboard
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="p-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {errorMessage && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {errorMessage}
+                </div>
+              )}
+
+              {/* Email Field */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 font-poppins flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-orange-500" />
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="your.email@example.com"
+                  required
+                  disabled={isLoading}
+                  className="w-full h-11 px-4 rounded-lg border-2 border-gray-200 focus:border-orange-400 focus:outline-none transition-all duration-300 font-poppins text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 font-poppins flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-orange-500" />
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  required
+                  disabled={isLoading}
+                  className="w-full h-11 px-4 rounded-lg border-2 border-gray-200 focus:border-orange-400 focus:outline-none transition-all duration-300 font-poppins text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+
+              <Separator className="my-6" />
+
+              {/* Submit Button */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 font-poppins text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isLoading ? "Signing in..." : "Sign In"}
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </motion.div>
+
+              {/* Register Link */}
+              <p className="text-center text-sm text-gray-600 font-poppins mt-6">
+                Don't have an account?{" "}
+                <a
+                  href="/register"
+                  className="text-orange-500 font-semibold hover:text-orange-600 underline transition-colors"
+                >
+                  Register here
+                </a>
+              </p>
+            </form>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   );
 };
