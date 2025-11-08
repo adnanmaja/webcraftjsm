@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { LogIn, Mail, Lock, ArrowRight } from "lucide-react";
 import bgImage from "@/assets/Background.svg";
+import { authService } from "@/services";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,24 +31,16 @@ const Login = () => {
     setError("");
 
     try {
-      // Fetch user by email from API
-      const response = await fetch(
-        `http://localhost:8000/api/users/?email=${formData.email}`
-      );
+      // Login with auth service
+      await authService.login(formData.email, formData.password);
 
-      if (!response.ok) {
-        throw new Error("User not found");
-      }
-
-      const user = await response.json();
-
-      // Store user data in localStorage (in production, use proper auth tokens)
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Navigate to dashboard
-      navigate("/");
+      // Navigate to menu page
+      navigate("/menu");
     } catch (err) {
-      setError("Login failed. Please check your credentials.");
+      setError(
+        err.response?.data?.detail ||
+          "Login failed. Please check your credentials."
+      );
       console.error("Login error:", err);
     } finally {
       setIsSubmitting(false);

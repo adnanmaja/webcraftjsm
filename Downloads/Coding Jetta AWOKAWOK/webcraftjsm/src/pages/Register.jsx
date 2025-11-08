@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { UserPlus, Mail, Lock, User, Phone, ArrowRight } from "lucide-react";
 import bgImage from "@/assets/Background.svg";
+import { authService } from "@/services";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Register = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,35 +35,27 @@ const Register = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
+    setSuccess("");
 
     try {
-      // Create new user via API
-      const response = await fetch("http://localhost:8000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          role: "customer", // Default role
-        }),
+      // Register new user
+      await authService.register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: "customer", // Default role
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Registration failed");
-      }
+      setSuccess("Registration successful! Redirecting to login...");
 
-      const user = await response.json();
-
-      // Store user data in localStorage
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // Navigate to login
-      navigate("/login");
+      // Navigate to login after short delay
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (err) {
-      setError(err.message || "Registration failed. Please try again.");
+      setError(
+        err.response?.data?.detail || "Registration failed. Please try again."
+      );
       console.error("Registration error:", err);
     } finally {
       setIsSubmitting(false);
@@ -114,6 +108,12 @@ const Register = () => {
               {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm">
                   {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg text-sm">
+                  {success}
                 </div>
               )}
 

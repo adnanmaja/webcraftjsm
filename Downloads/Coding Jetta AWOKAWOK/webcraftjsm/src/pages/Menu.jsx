@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -12,8 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Plus, Trash2, Check, X } from "lucide-react";
+import { Plus, Trash2, Check, X, Loader2 } from "lucide-react";
 import bgImage from "@/assets/Background.svg";
+import { menuService } from "@/services";
 
 const MenuCard = ({
   name,
@@ -120,45 +121,9 @@ const MenuCard = ({
 );
 
 export default function Menu() {
-  const initialMenuItems = [
-    {
-      id: 1,
-      name: "Ayam sayur",
-      category: "Makanan berat",
-      price: "Rp15.000",
-      description:
-        "Nasi dipadukan dengan ayam sayur, gratis sambel dan nasi sepuasnya",
-      available: true,
-    },
-    {
-      id: 2,
-      name: "Nasi Goreng",
-      category: "Makanan berat",
-      price: "Rp12.000",
-      description:
-        "Nasi goreng spesial dengan telur, sayuran segar dan bumbu pilihan",
-      available: true,
-    },
-    {
-      id: 3,
-      name: "Mie Ayam",
-      category: "Makanan berat",
-      price: "Rp10.000",
-      description:
-        "Mie ayam dengan topping ayam cincang, pangsit goreng dan bakso",
-      available: false,
-    },
-    {
-      id: 4,
-      name: "Soto Ayam",
-      category: "Makanan berat",
-      price: "Rp13.000",
-      description: "Soto ayam kuah bening dengan nasi, emping dan sambal",
-      available: true,
-    },
-  ];
-
-  const [menuItems, setMenuItems] = useState(initialMenuItems);
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     menuId: null,
@@ -170,14 +135,45 @@ export default function Menu() {
     category: "",
     price: "",
     description: "",
+    warung_id: 1, // Default warung ID
+    image_url: "",
+    stock: 100,
   });
 
-  const handleToggleAvailability = (id) => {
-    setMenuItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, available: !item.available } : item
-      )
-    );
+  // Fetch menu items on component mount
+  useEffect(() => {
+    fetchMenuItems();
+  }, []);
+
+  const fetchMenuItems = async () => {
+    try {
+      setLoading(true);
+      const data = await menuService.getAll();
+      setMenuItems(data);
+      setError(null);
+    } catch (err) {
+      console.error("Error fetching menu items:", err);
+      setError("Gagal memuat menu. Pastikan API berjalan.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleAvailability = async (id) => {
+    const item = menuItems.find((item) => item.id === id);
+    const newStock = item.stock > 0 ? 0 : 100;
+
+    try {
+      await menuService.update(id, { stock: newStock });
+      setMenuItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === id ? { ...item, stock: newStock } : item
+        )
+      );
+    } catch (err) {
+      console.error("Error updating availability:", err);
+      alert("Gagal mengubah ketersediaan menu");
+    }
   };
 
   const openDeleteModal = (id, name) => {
@@ -188,11 +184,17 @@ export default function Menu() {
     setConfirmModal({ isOpen: false, menuId: null, menuName: "" });
   };
 
-  const handleConfirmDelete = () => {
-    setMenuItems((prevItems) =>
-      prevItems.filter((item) => item.id !== confirmModal.menuId)
-    );
-    closeDeleteModal();
+  const handleConfirmDelete = async () => {
+    try {
+      await menuService.delete(confirmModal.menuId);
+      setMenuItems((prevItems) =>
+        prevItems.filter((item) => item.id !== confirmModal.menuId)
+      );
+      closeDeleteModal();
+    } catch (err) {
+      console.error("Error deleting menu item:", err);
+      alert("Gagal menghapus menu");
+    }
   };
 
   const openAddMenuModal = () => {
@@ -206,6 +208,9 @@ export default function Menu() {
       category: "",
       price: "",
       description: "",
+      warung_id: 1,
+      image_url: "",
+      stock: 100,
     });
   };
 
@@ -217,40 +222,35 @@ export default function Menu() {
     }));
   };
 
-  const handleAddMenu = () => {
-    console.log("Attempting to add menu:", newMenu);
-
+  const handleAddMenu = async () => {
     if (
       newMenu.name &&
       newMenu.category &&
       newMenu.price &&
       newMenu.description
     ) {
-      const newId =
-        menuItems.length > 0
-          ? Math.max(...menuItems.map((item) => item.id)) + 1
-          : 1;
-      const menuToAdd = {
-        id: newId,
-        name: newMenu.name,
-        category: newMenu.category,
-        price: newMenu.price.startsWith("Rp")
-          ? newMenu.price
-          : `Rp${newMenu.price}`,
-        description: newMenu.description,
-        available: true,
-      };
+      try {
+        const menuToAdd = {
+          warung_id: newMenu.warung_id,
+          name: newMenu.name,
+          price: parseFloat(newMenu.price.replace(/[^0-9]/g, "")),
+          image_url: newMenu.image_url || "default_image.jpg",
+          stock: newMenu.stock,
+          category: newMenu.category,
+          description: newMenu.description,
+        };
 
-      console.log("Adding menu item:", menuToAdd);
-      setMenuItems((prevItems) => [...prevItems, menuToAdd]);
-      closeAddMenuModal();
+        const createdMenu = await menuService.create(menuToAdd);
+        setMenuItems((prevItems) => [...prevItems, createdMenu]);
+        closeAddMenuModal();
+      } catch (err) {
+        console.error("Error adding menu:", err);
+        alert(
+          "Gagal menambahkan menu: " +
+            (err.response?.data?.detail || err.message)
+        );
+      }
     } else {
-      console.log("Validation failed. Missing fields:", {
-        name: !newMenu.name,
-        category: !newMenu.category,
-        price: !newMenu.price,
-        description: !newMenu.description,
-      });
       alert("Harap isi semua field yang diperlukan!");
     }
   };
@@ -321,27 +321,64 @@ export default function Menu() {
             ease: [0.19, 1.0, 0.22, 1.0],
           }}
         >
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-12 h-12 animate-spin text-orange-500" />
+              <span className="ml-3 text-lg text-gray-600">Memuat menu...</span>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 text-center">
+              <p className="text-red-600 font-semibold">{error}</p>
+              <Button
+                onClick={fetchMenuItems}
+                className="mt-4 bg-red-600 hover:bg-red-700"
+              >
+                Coba Lagi
+              </Button>
+            </div>
+          )}
+
           {/* Menu Cards Grid */}
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-              layout
-            >
-              {menuItems.map((item, index) => (
-                <MenuCard
-                  key={item.id}
-                  name={item.name}
-                  category={item.category}
-                  price={item.price}
-                  description={item.description}
-                  available={item.available}
-                  onDelete={() => openDeleteModal(item.id, item.name)}
-                  onToggleAvailability={() => handleToggleAvailability(item.id)}
-                  index={index}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          {!loading && !error && (
+            <AnimatePresence mode="popLayout">
+              <motion.div
+                className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                layout
+              >
+                {menuItems.length === 0 ? (
+                  <div className="col-span-2 text-center py-20">
+                    <p className="text-gray-600 text-lg">
+                      Belum ada menu. Tambahkan menu pertama!
+                    </p>
+                  </div>
+                ) : (
+                  menuItems.map((item, index) => (
+                    <MenuCard
+                      key={item.id}
+                      name={item.name}
+                      category={item.category || "Makanan"}
+                      price={
+                        typeof item.price === "number"
+                          ? `Rp${item.price.toLocaleString("id-ID")}`
+                          : item.price
+                      }
+                      description={item.description}
+                      available={item.stock > 0}
+                      onDelete={() => openDeleteModal(item.id, item.name)}
+                      onToggleAvailability={() =>
+                        handleToggleAvailability(item.id)
+                      }
+                      index={index}
+                    />
+                  ))
+                )}
+              </motion.div>
+            </AnimatePresence>
+          )}
         </motion.main>
       </div>
 
