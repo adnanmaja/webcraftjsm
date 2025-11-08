@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+@font-face {
+  font-family: "Javassoul";
+  src: url("./fonts/Javassoul.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900;
+    font-family: "Poppins", system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-javassoul {
+    font-family: "Javassoul", cursive, "Poppins", sans-serif;
+    font-weight: 400;
+  }
+
+  .font-poppins {
+    font-family: "Poppins", system-ui, -apple-system, sans-serif;
+  }
+
+  /* Gradient text border/stroke effect */
+  .text-gradient-stroke {
+    background: linear-gradient(135deg, #ffc882, #ff9a62, #ffa07a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 1px 1px rgba(255, 154, 98, 0.3))
+      drop-shadow(0 0 8px rgba(255, 200, 130, 0.4));
+  }
+
+  /* Alternative: Outlined gradient text */
+  .text-gradient-outline {
+    color: #ffc882;
+    -webkit-text-stroke: 1.5px transparent;
+    background: linear-gradient(135deg, #ff9a62, #ffa07a, #ffb347);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 10px rgba(255, 200, 130, 0.5),
+      0 0 20px rgba(255, 154, 98, 0.3);
+  }
+}
